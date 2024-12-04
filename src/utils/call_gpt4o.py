@@ -16,22 +16,22 @@ def encode_image(image_path):
 
 def call_openai_endpoint(img_path: str):
 
-  system_prompt = """You are an experienced seasoned underwriter working in Senior Living Insurance Facility space. 
-  You know all the important information that you need from an application to write the best coverage policy.
-  You understand all types of policies like General Liability, Professional Liability, commercial property insurance etc.
+  # system_prompt = """You are an experienced seasoned underwriter working in Senior Living Insurance Facility space. 
+  # You know all the important information that you need from an application to write the best coverage policy.
+  # You understand all types of policies like General Liability, Professional Liability, commercial property insurance etc.
 
-  You will be provided with image chunks of application form. Find information on these entities in the image chunk: 1. Facility, 2. Residents,
-  3. Claims history, 4. Licensing and Ceritfication, 5. Authorized representatives, 6. Risk Management, 7. Contracted Services, 
-  8. Physical Premises and Security, 9. Corporate Structure, 10. Bed Census and Occupancy, 11. Coverage, 12. Services, 13. Incidents, 14. Staffing.
+  # You will be provided with image chunks of application form. Find information on these entities in the image chunk: 1. Facility, 2. Residents,
+  # 3. Claims history, 4. Licensing and Ceritfication, 5. Authorized representatives, 6. Risk Management, 7. Contracted Services, 
+  # 8. Physical Premises and Security, 9. Corporate Structure, 10. Bed Census and Occupancy, 11. Coverage, 12. Services, 13. Incidents, 14. Staffing.
 
-  Output in JSON format, and do not output any explanation.
-  """
-
-  # system_prompt = """
-  # You will be provided with image chunks of application form. Convert it into a json output, maintaining the structure of the application
-
-  # Output only in JSON format, and do not output any explanation.
+  # Output in JSON format, and do not output any explanation.
   # """
+
+  system_prompt = """
+  You will be provided with image chunks of application form. Convert it into a json output, maintaining the structure of the application
+
+  Output only in JSON format, and do not output any explanation.
+  """
 
   example_prompt_1 = """
   Facility Information
@@ -57,9 +57,9 @@ def call_openai_endpoint(img_path: str):
   """
 
   assistant_prompt_1 = {
-    "Facility":{
-      "name": "Senior Living LLC",
-      "address": {
+    
+      "facility_name": "Senior Living LLC",
+      "facility_address": {
         "add_ln_1": "1234 Northside Blvd",
         "add_ln_2": "",
         "city": "Richardson",
@@ -67,22 +67,16 @@ def call_openai_endpoint(img_path: str):
         "zip": "75080"
       },
       "fein": "12-3424221",
+      "administrator_name": "Ricky Bahal",
+      "administrator_telephone": "838-332-2839",
+      "administrator_email": "ricky@seniorliving.com",
       "years_under_present_ownership": 5,
       "years_under_present_management": 3,
       "license_revoked_in_5_years": False,
       "medicare_certifacted_suspended_in_3_years": False,
       "fined_in_3_years": False,
-    },
-
-    "Staffing":{
-      "key_personnel":{
-        "role": "Administrator",
-        "name": "Ricky Bahal",
-        "telephone": "838-332-2839",
-        "email": "ricky@seniorliving.com"
-      }
-    }
   }
+
   assistant_prompt_1 = json.dumps(assistant_prompt_1)
 
   example_prompt_2 = """
@@ -112,13 +106,10 @@ def call_openai_endpoint(img_path: str):
   Do volunteers assist with resident feeding? ☑ Yes ☐ No  
   """
   assistant_prompt_2 = {
-    "Staffing":{
-      "key_personnel":{
-        "role": "Director of Nursing",
-        "name": "Julian Caeser",
-        "years_in_facility": 12,
-        "years_as_director_of_nursing": 5,
-      },
+
+      "director_of_nursing_name": "Julian Caeser",
+      "director_of_nursing_years_in_facility": 12,
+      "director_of_nursing_years_in_position": 5,
       "staffing_levels":[
         {
           "staff_type": "RN",
@@ -155,7 +146,7 @@ def call_openai_endpoint(img_path: str):
       "criminial_background_check": True,
       "number_of_volunteers": 4,
       "volunteer_assist_in_resident_feeding": True
-    }
+    
   }
   assistant_prompt_2 = json.dumps(assistant_prompt_2)
 

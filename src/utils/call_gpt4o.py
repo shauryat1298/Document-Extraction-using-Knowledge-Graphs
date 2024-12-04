@@ -27,6 +27,12 @@ def call_openai_endpoint(img_path: str):
   Output in JSON format, and do not output any explanation.
   """
 
+  # system_prompt = """
+  # You will be provided with image chunks of application form. Convert it into a json output, maintaining the structure of the application
+
+  # Output only in JSON format, and do not output any explanation.
+  # """
+
   example_prompt_1 = """
   Facility Information
 
@@ -156,17 +162,29 @@ def call_openai_endpoint(img_path: str):
   inference_message = encode_image(img_path)
 
   messages = [
-    {"role": "system", "content": [{"type": "text", "text": system_prompt}]},
+    {"role": "system", "content": system_prompt},
     {"role": "user","content": [{ "type": "text", "text": example_prompt_1}]},
     {"role": "assistant","content": [{ "type": "text", "text": assistant_prompt_1}]},
     {"role": "user","content": [{ "type": "text", "text": example_prompt_2}]},
     {"role": "assistant","content": [{ "type": "text", "text": assistant_prompt_2 }]},
-    {"role": "user","content": [{ "type": "text", "text": inference_message}]},
+    {
+            "role": "user",
+            "content": [
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:image/jpeg;base64,{inference_message}"
+                    }
+                }
+            ]
+        },
   ]
+
 
   completion = client.chat.completions.create(
     model="gpt-4o-mini",
-    messages=messages
+    messages=messages,
+    temperature = 0.7
   )
   
   return completion.choices[0].message.content

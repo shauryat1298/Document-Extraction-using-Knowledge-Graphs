@@ -5,8 +5,8 @@ import os
 from pathlib import Path
 import json
 
-example_img_1_path = Path(r"C:\Users\shaur\Desktop\Learnings\KG_Tests\senior_living_dm\artifacts\applications\chunked_pngs\crc_app_1_4.png")
-example_img_2_path = Path(r"C:\Users\shaur\Desktop\Learnings\KG_Tests\senior_living_dm\artifacts\applications\chunked_pngs\crc_app_3_4.png")
+example_img_1_path = Path(r"C:\Users\shaur\Desktop\Learnings\KG_Tests\senior_living_dm\artifacts\applications\few_shot_examples\crc_app_1_4.png")
+example_img_2_path = Path(r"C:\Users\shaur\Desktop\Learnings\KG_Tests\senior_living_dm\artifacts\applications\few_shot_examples\crc_app_3_4.png")
 
 client = OpenAI()
 
@@ -158,17 +158,7 @@ def call_openai_endpoint(img_path: str):
     {"role": "assistant","content": [{ "type": "text", "text": assistant_prompt_1}]},
     {"role": "user","content": [{ "type": "text", "text": example_prompt_2}]},
     {"role": "assistant","content": [{ "type": "text", "text": assistant_prompt_2 }]},
-    {
-            "role": "user",
-            "content": [
-                {
-                    "type": "image_url",
-                    "image_url": {
-                        "url": f"data:image/jpeg;base64,{inference_message}"
-                    }
-                }
-            ]
-        },
+    {"role": "user","content": [{"type": "image_url","image_url": {"url": f"data:image/jpeg;base64,{inference_message}"}}]},
   ]
 
 
